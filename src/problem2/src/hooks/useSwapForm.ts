@@ -60,7 +60,7 @@ export const useSwapForm = () => {
     }
 
     const getReceiveAmount = (): string => {
-        if (!fromCurrency || !toCurrency) {
+        if (!fromCurrency || !toCurrency || !amount) {
             return ''
         }
 
