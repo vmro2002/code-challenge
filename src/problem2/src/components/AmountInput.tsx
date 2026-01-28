@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { AmountInputProps } from "@/utils/interfaces";
+import { getTokenIcon } from "@/utils/function";
 
 export const AmountInput = forwardRef<HTMLInputElement, AmountInputProps>(
   (
@@ -16,11 +17,6 @@ export const AmountInput = forwardRef<HTMLInputElement, AmountInputProps>(
     },
     ref
   ) => {
-    // Get token icon URL - using a common token icons CDN
-    const getTokenIcon = (symbol: string) => {
-      const normalized = symbol.toLowerCase();
-      return `https://raw.githubusercontent.com/Switcheo/token-icons/main/tokens/${normalized}.svg`;
-    };
 
     return (
       <div
