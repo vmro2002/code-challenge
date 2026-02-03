@@ -30,7 +30,8 @@ export function TokenSwapForm() {
     swapSelection,
     rate,
     setRate,
-    getReceiveAmount
+    getReceiveAmount,
+    isPending,
   } = useSwapForm()
 
   // Show skeleton while loading prices
@@ -95,6 +96,7 @@ export function TokenSwapForm() {
           {/* Submit button */}
           <Button
             type="submit"
+            disabled={isPending}
             className={cn(
               "w-full h-14 text-lg font-semibold rounded-xl",
               "bg-linear-to-r from-primary to-accent",
@@ -102,7 +104,7 @@ export function TokenSwapForm() {
               "disabled:opacity-50 disabled:cursor-not-allowed"
             )}
           >
-            {false ? (
+            {isPending ? (
               <span className="flex items-center gap-2">
                 <Loader2 className="w-5 h-5 animate-spin" />
                 Swapping...

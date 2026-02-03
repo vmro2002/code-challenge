@@ -1,7 +1,10 @@
-import { SwapFormSchema, type SwapFormType } from "@/schemas/swap-form"
-import { useForm, type SubmitHandler, useWatch, type SubmitErrorHandler } from "react-hook-form"
+import { SwapFormSchema } from "@/schemas/swap-form"
+import { useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import Decimal from 'decimal.js'
+import { useMutation } from "@tanstack/react-query"
+import { toast } from "sonner"
+
 
 export const useSwapForm = () => {
     const {
@@ -9,7 +12,8 @@ export const useSwapForm = () => {
         formState: {errors}, 
         register,
         control,
-        setValue
+        setValue,
+        reset
     } = useForm({
         resolver: zodResolver(SwapFormSchema),
         mode: 'onSubmit',
@@ -71,15 +75,18 @@ export const useSwapForm = () => {
         }
     }
 
-    const runOnSubmit: SubmitHandler<SwapFormType> = (data) => {
-        console.log('submitted', data)
-    }
+    const mutation = useMutation({
+        mutationFn:  async () => {
+            await new Promise((resolve) => setTimeout(resolve, 1500))
+            return { txHash: `0x${Math.random().toString(16).slice(2)}` }
+          },
+        onSuccess: () => {
+            reset()
+            toast.success("Swap completed successfully")
+        },
+    })
 
-    const onError: SubmitErrorHandler<SwapFormType> = () => {
-        console.log('error')
-    }
-
-    const onSubmit = handleSubmit(runOnSubmit, onError)
+    const onSubmit = handleSubmit(() => mutation.mutate())
 
     return {
         register,
@@ -93,5 +100,6 @@ export const useSwapForm = () => {
         rate,
         setRate,
         getReceiveAmount,
+        isPending: mutation.isPending,
     }
 }
